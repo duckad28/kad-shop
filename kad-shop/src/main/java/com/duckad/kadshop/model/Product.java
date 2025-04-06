@@ -11,7 +11,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,12 +18,20 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String description;
+    public Product(String name, String brand, int inventory, BigDecimal price, String description, Category category2) {
+        this.description = description;
+        this.name = name;
+        this.brand = brand;
+        this.inventory = inventory;
+        this.price = price;
+        this.category = category2;
+    }
 
     private String name;
     private String brand;
