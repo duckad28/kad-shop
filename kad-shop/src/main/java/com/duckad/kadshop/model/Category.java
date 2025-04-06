@@ -2,6 +2,8 @@ package com.duckad.kadshop.model;
 
 import java.util.List;
 
+import org.aspectj.weaver.ast.CallExpr;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,7 +17,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class Category {
     @Id
@@ -26,4 +27,8 @@ public class Category {
     
     @OneToMany(mappedBy = "category")
     private List<Product> products;
+
+    public Category(String name) {
+        this.name = name;
+    }
 }
