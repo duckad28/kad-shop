@@ -14,7 +14,7 @@ import com.duckad.kadshop.exception.ResourceNotFoundException;
 import com.duckad.kadshop.model.Image;
 import com.duckad.kadshop.model.Product;
 import com.duckad.kadshop.repository.image.ImageRepository;
-import com.duckad.kadshop.service.product.ProductService;
+import com.duckad.kadshop.service.product.IProductService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ImageService implements IImageService{
     private final ImageRepository imageRepository;
-    private final ProductService productService;
+    private final IProductService productService;
 
     @Override
     public void deleteImage(Long id) {
