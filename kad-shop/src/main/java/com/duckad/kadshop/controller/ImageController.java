@@ -19,7 +19,6 @@ import com.duckad.kadshop.model.Image;
 import com.duckad.kadshop.response.ApiResponse;
 import com.duckad.kadshop.service.image.IImageService;
 
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
