@@ -36,9 +36,10 @@ public class ImageController {
     private final IImageService imageService;
 
     @PostMapping("/upload")
-    public ResponseEntity<ApiResponse> postImages(@RequestBody List<MultipartFile> files,@RequestParam Long productId) {
+    public ResponseEntity<ApiResponse> postImages(@RequestParam List<MultipartFile> files,@RequestParam Long productId) {
         try {List<ImageDto> imagesDto = imageService.saveImages(files, productId);
-        return ResponseEntity.ok(new ApiResponse("Upload success", imagesDto));
+            if (imagesDto.size() > 0) return ResponseEntity.ok(new ApiResponse("Upload success", imagesDto));
+            else throw new Exception("Upload failed");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("Upload failed", e.getMessage()));
         }

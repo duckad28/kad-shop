@@ -3,6 +3,7 @@ package com.duckad.kadshop.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.duckad.kadshop.dto.ProductDto;
 import com.duckad.kadshop.model.Product;
 import com.duckad.kadshop.request.AddProductRequest;
 import com.duckad.kadshop.request.UpdateProductRequest;
@@ -44,7 +45,7 @@ public class ProductController {
     @GetMapping("/all")
     public ResponseEntity<ApiResponse> getProducts(@RequestParam(required = false) Map<String, String> params) {
         try {
-            List<Product> products = new ArrayList<>();
+            List<ProductDto> products = new ArrayList<>();
             if (params.size() == 0) {
                 products = productService.getAllProducts();
             } else {

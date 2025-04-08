@@ -3,10 +3,14 @@ package com.duckad.kadshop.service.product;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import com.duckad.kadshop.dto.ImageDto;
+import com.duckad.kadshop.dto.ProductDto;
 import com.duckad.kadshop.exception.ProductNotFoundException;
 import com.duckad.kadshop.model.Category;
+import com.duckad.kadshop.model.Image;
 import com.duckad.kadshop.model.Product;
 import com.duckad.kadshop.repository.CategoryRepository;
 import com.duckad.kadshop.repository.product.ProductRepository;
@@ -20,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class ProductService implements IProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public Product addProduct(AddProductRequest request) {
@@ -77,28 +82,28 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<ProductDto> getAllProducts() {
+        return convertProductDtos(productRepository.findAll());
     }
 
     @Override
-    public List<Product> getProductsByCategory(String category) {
-         return productRepository.findByCategoryName(category);
+    public List<ProductDto> getProductsByCategory(String category) {
+         return convertProductDtos(productRepository.findByCategoryName(category));
     }
 
     @Override
-    public List<Product> getProductsByBrand(String brand) {
-        return productRepository.findByBrand(brand);
+    public List<ProductDto> getProductsByBrand(String brand) {
+        return convertProductDtos(productRepository.findByBrand(brand));
     }
 
     @Override
-    public List<Product> getProductsByName(String name) {
-        return productRepository.findByName(name);
+    public List<ProductDto> getProductsByName(String name) {
+        return convertProductDtos(productRepository.findByName(name));
     }
 
     @Override
-    public List<Product> getProductsByCategoryAndBrand(String category, String brand) {
-        return productRepository.findByCategoryNameAndBrand(category, brand);
+    public List<ProductDto> getProductsByCategoryAndBrand(String category, String brand) {
+        return convertProductDtos(productRepository.findByCategoryNameAndBrand(category, brand));
     }
 
     @Override
@@ -106,4 +111,15 @@ public class ProductService implements IProductService {
         return productRepository.countByBrandAndName(brand, name);
     }
 
+    public List<ProductDto> convertProductDtos(List<Product> products) {
+        return products.stream().map(this::convertProductDto).toList();
+    }
+
+    public ProductDto convertProductDto(Product product) {
+        ProductDto productDto = modelMapper.map(product, ProductDto.class);
+        List<Image> images = product.getImages();
+        List<ImageDto> imageDtos = images.stream().map(img -> modelMapper.map(img, ImageDto.class)).toList();
+        productDto.setImages(imageDtos);
+        return productDto;
+    }
 }
