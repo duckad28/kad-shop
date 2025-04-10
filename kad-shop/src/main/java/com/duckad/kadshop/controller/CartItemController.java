@@ -25,46 +25,34 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CartItemController {
     private final ICartItemService cartItemService;
-
-    @GetMapping("/all")
-    public ResponseEntity<ApiResponse> getAllCartItems(@RequestParam(value = "cart", required = false) Long id) {
-        try {
-            List<CartItem> cartItems = new ArrayList<>();
-            if (id == null) cartItems = cartItemService.findAll();
-            else cartItems = cartItemService.findAllByCart(id);
-            return ResponseEntity.ok(new ApiResponse("Get all cart item success", cartItems));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("Get all cart item failed", e.getMessage()));
-        }
-    }
     
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse> getCartById(@PathVariable Long id) {
+    @GetMapping("/")
+    public ResponseEntity<ApiResponse> getCart(@RequestParam Long cartId, @RequestParam Long productId) {
         try {
-            CartItem cartItem = cartItemService.find(id);
-            return ResponseEntity.ok(new ApiResponse("Get all cart  item success", cartItem));
+            CartItem cartItem = cartItemService.getCartItem(cartId, productId);
+            return ResponseEntity.ok(new ApiResponse("Get cart  item success", cartItem));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("Get cart failed", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("Get cart item failed", e.getMessage()));
         }
     }
 
-    @PutMapping("/{id}/update")
-    public ResponseEntity<ApiResponse> updateCart(@PathVariable Long id, @RequestBody CartItem newCartItem) {
+    @PutMapping("/update")
+    public ResponseEntity<ApiResponse> putCartQuantity(@RequestParam Long cartId, @RequestParam Long productId, @RequestParam int quantity) {
         try {
-            CartItem cartItem = cartItemService.update(newCartItem, id);
-            return ResponseEntity.ok(new ApiResponse("Update cart item success", cartItem));
+            cartItemService.updateItemQuantity(cartId, productId, quantity);
+            return ResponseEntity.ok(new ApiResponse("Update cart  item success", null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("Update cart item failed", e.getMessage()));
         }
     }
     
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse> updateCart(@RequestBody CartItem newCartItem) {
+    public ResponseEntity<ApiResponse> addNewCartItem(@RequestParam Long cartId, @RequestParam Long productId, @RequestParam int quantity) {
         try {
-            CartItem cartItem = cartItemService.create(newCartItem);
-            return ResponseEntity.ok(new ApiResponse("Create cart item success", cartItem));
+            cartItemService.addItemToCart(cartId, productId, quantity);
+            return ResponseEntity.ok(new ApiResponse("Add cart item success", null));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("Create cart item failed", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("Add cart item failed", e.getMessage()));
         }
     }
 }

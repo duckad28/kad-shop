@@ -32,9 +32,6 @@ public class Product {
         this.price = price;
         this.category = category2;
     }
-    public Product(String name) {
-        this.name = name;
-    }
     private String name;
     private String brand;
     private int inventory;
